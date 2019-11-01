@@ -82,16 +82,20 @@ class Neuron:
         return sigmoid(input_layer)
  
 class OurNeuralNetwork:
-    def __init__(self, weights, bias):
-        self.weights = weights
-        self.bias = bias
+    def __init__(self):
+        #self.weights = weights
+        #self.bias = bias
         self.h1 = Neuron(GetWeightFile('input_weights'), GetWeightFile('bias_weights'))
         self.h2 = Neuron(GetWeightFile('leyar_weights'), GetWeightFile('bias_weights'))
         self.o1 = Neuron(GetWeightFile('output_weights'), GetWeightFile('bias_weights'))
     def feedforward(self, x):
-        out_h1 = self.h1.feedforward(x)
-        out_h2 = self.h2.feedforward(x)
-        out_o1 = self.o1.feedforward(np.array([out_h1, out_h2]))
+        out_h1 = self.h1.feedforward(x, len(GetWeightFile('input_weights')))
+        print(out_h1)
+        print()
+        out_h2 = self.h2.feedforward(out_h1, len(GetWeightFile('leyar_weights')))
+        print(out_h2)
+        print()
+        out_o1 = self.o1.feedforward(out_h2, len(GetWeightFile('output_weights')))
         return out_o1
 
 
@@ -105,24 +109,24 @@ for i  in range(h):
         img1d.append(img[i][j])
 
 # Передача веса и смещения в нейрон
-imput_layer = Neuron(GetWeightFile('input_weights'), GetWeightFile('bias_weights'))
-in_l = imput_layer.feedforward(img1d, len(GetWeightFile('input_weights')))
-print(in_l)
-print()
+#imput_layer = Neuron(GetWeightFile('input_weights'), GetWeightFile('bias_weights'))
+#in_l = imput_layer.feedforward(img1d, len(GetWeightFile('input_weights')))
+#print(in_l)
+#print()
 
-slayer_l = Neuron(GetWeightFile('leyar_weights'), GetWeightFile('bias_weights'))
-slay_l = slayer_l.feedforward(img1d, len(GetWeightFile('leyar_weights')))
-print(slay_l)
-print()
+#slayer_l = Neuron(GetWeightFile('leyar_weights'), GetWeightFile('bias_weights'))
+#slay_l = slayer_l.feedforward(img1d, len(GetWeightFile('leyar_weights')))
+#print(slay_l)
+#print()
 
-out_layer = Neuron(GetWeightFile('output_weights'), GetWeightFile('bias_weights'))
-print(out_layer.feedforward(slay_l, len(GetWeightFile('output_weights'))))
+#out_layer = Neuron(GetWeightFile('output_weights'), GetWeightFile('bias_weights'))
+#print(out_layer.feedforward(slay_l, len(GetWeightFile('output_weights'))))
 
 
 
 # Тренируем нашу нейронную сеть!
-#network = OurNeuralNetwork()
-#network.train(data, all_y_trues)
+network = OurNeuralNetwork()
+print(network.feedforward(img1d))
 
 
 
