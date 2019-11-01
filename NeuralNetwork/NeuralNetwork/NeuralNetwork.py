@@ -85,9 +85,9 @@ class OurNeuralNetwork:
     def __init__(self, weights, bias):
         self.weights = weights
         self.bias = bias
-        self.h1 = Neuron(weights, bias)
-        self.h2 = Neuron(weights, bias)
-        self.o1 = Neuron(np.array([random.uniform(0, 10), random.uniform(0, 10)]), bias)
+        self.h1 = Neuron(GetWeightFile('input_weights'), GetWeightFile('bias_weights'))
+        self.h2 = Neuron(GetWeightFile('leyar_weights'), GetWeightFile('bias_weights'))
+        self.o1 = Neuron(GetWeightFile('output_weights'), GetWeightFile('bias_weights'))
     def feedforward(self, x):
         out_h1 = self.h1.feedforward(x)
         out_h2 = self.h2.feedforward(x)
