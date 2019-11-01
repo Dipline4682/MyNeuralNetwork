@@ -101,6 +101,7 @@ class OurNeuralNetwork:
 
 img = cv2.imread('2.png', 0)
 h, w = img.shape
+ret,img = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
 cv2.imshow('qwe', img)
 
 img1d = []
