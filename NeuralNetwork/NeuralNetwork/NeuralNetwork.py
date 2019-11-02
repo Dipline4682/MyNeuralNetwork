@@ -16,7 +16,8 @@ def SetWeightFile(SaveWeight):
     with open('input_bias_weights.txt', 'w') as filehandle:  
         for listitem in SaveWeight:
             filehandle.write('%s\n' % listitem)
-
+#-------------------------------------------------------------------------
+#---------------------Загрузка весов--------------------------------------
 def GetWeightFile (puty):
     #---------------------------------------------------------------------
     # Загрузка выходных весов
@@ -107,6 +108,8 @@ def GetWeightFile (puty):
         leyar_weights = np.reshape(leyar_weights, (100, 100))
         return leyar_weights
 
+
+
 def sigmoid(x):
     return 1. / (1. + np.exp(-x))
 
@@ -124,12 +127,12 @@ class Neuron:
         weights = []
         weights.clear()
         for i in range(l):
-            input_layer.append(np.dot(self.weights[i], inputs))
-        input_layer = np.array(input_layer)
-        for i in range(l):
-            weights.append(input_layer[i] + self.bias[i])
+            weights.append(np.dot(self.weights[i], inputs))
         weights = np.array(weights)
-        return sigmoid(weights)
+        for i in range(l):
+            input_layer.append(weights[i] + self.bias[i])
+        input_layer = np.array(input_layer)
+        return sigmoid(input_layer)
  
 class OurNeuralNetwork:
     def __init__(self):
@@ -163,9 +166,14 @@ for i  in range(h):
 
 #Передаём изображение в нейронную сеть
 network = OurNeuralNetwork()
-print(network.feedforward(img1d))
-
-
+#print(network.feedforward(img1d))
+pol = []
+pol = network.feedforward(img1d)
+print(pol)
+otv = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+otv = np.array(otv)
+print()
+print(mse_loss(pol, otv))
 
 #SetWeightFile(CreatWeights(h*w)) #Генерация и запись в файл случайных значений для весов
 #print(GetWeightFile('leyar_weights')) # Считывание с файла массива весов 
