@@ -161,8 +161,7 @@ for i  in range(h):
         if img[i][j] == 255: img1d.append(img[i][j] - 254)
         else: img1d.append(img[i][j])
 
-
-# Тренируем нашу нейронную сеть!
+#Передаём изображение в нейронную сеть
 network = OurNeuralNetwork()
 print(network.feedforward(img1d))
 
