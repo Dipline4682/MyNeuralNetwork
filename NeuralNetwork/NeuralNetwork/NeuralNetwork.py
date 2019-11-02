@@ -160,21 +160,6 @@ for i  in range(h):
     for j in range(w):
         if img[i][j] == 255: img1d.append(img[i][j] - 254)
         else: img1d.append(img[i][j])
-#print(img1d)
-# Передача веса и смещения в нейрон
-#imput_layer = Neuron(GetWeightFile('input_weights'), GetWeightFile('bias_weights'))
-#in_l = imput_layer.feedforward(img1d, len(GetWeightFile('input_weights')))
-#print(in_l)
-#print()
-
-#slayer_l = Neuron(GetWeightFile('leyar_weights'), GetWeightFile('bias_weights'))
-#slay_l = slayer_l.feedforward(img1d, len(GetWeightFile('leyar_weights')))
-#print(slay_l)
-#print()
-
-#out_layer = Neuron(GetWeightFile('output_weights'), GetWeightFile('bias_weights'))
-#print(out_layer.feedforward(slay_l, len(GetWeightFile('output_weights'))))
-
 
 
 # Тренируем нашу нейронную сеть!
