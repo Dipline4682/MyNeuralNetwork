@@ -13,7 +13,7 @@ def CreatWeights(l):#h, w):
     return mas
 
 def SetWeightFile(SaveWeight):
-    with open('output_bias_weight.txt', 'w') as filehandle:  
+    with open('input_bias_weights.txt', 'w') as filehandle:  
         for listitem in SaveWeight:
             filehandle.write('%s\n' % listitem)
 
@@ -35,47 +35,33 @@ def GetWeightFile (puty):
         output_weights = np.reshape(output_weights, (10, 100))
         return output_weights
     #---------------------------------------------------------------------
-    # Загрузка входных весов смещения
-    elif puty == 'input_bias_weight':
-    # определим пустой список
-        input_bias_weight = []
-        input_bias_weight.clear()
-        # откроем файл и считаем его содержимое в список
-        with open('input_bias_weight.txt', 'r') as filehandle:  
-            for line in filehandle:
-                # удалим заключительный символ перехода строки
-                currentPlace = line[:-1]
-                # добавим элемент в конец списка
-                input_bias_weight.append(float(currentPlace))
-        return input_bias_weight
-    #---------------------------------------------------------------------
-    # Загрузка весов смещения скрытого слоя
-    elif puty == 'leyar_bias_weight':
-    # определим пустой список
-        leyar_bias_weight = []
-        leyar_bias_weight.clear()
-        # откроем файл и считаем его содержимое в список
-        with open('leyar_bias_weight.txt', 'r') as filehandle:  
-            for line in filehandle:
-                # удалим заключительный символ перехода строки
-                currentPlace = line[:-1]
-                # добавим элемент в конец списка
-                leyar_bias_weight.append(float(currentPlace))
-        return leyar_bias_weight
-    #---------------------------------------------------------------------
     # Загрузка весов выходного слоя
-    elif puty == 'output_bias_weight':
+    elif puty == 'output_bias_weights':
     # определим пустой список
         output_bias_weight = []
         output_bias_weight.clear()
         # откроем файл и считаем его содержимое в список
-        with open('output_bias_weight.txt', 'r') as filehandle:  
+        with open('output_bias_weights.txt', 'r') as filehandle:  
             for line in filehandle:
                 # удалим заключительный символ перехода строки
                 currentPlace = line[:-1]
                 # добавим элемент в конец списка
                 output_bias_weight.append(float(currentPlace))
         return output_bias_weight
+    #---------------------------------------------------------------------
+    # Загрузка входных весов смещения
+    elif puty == 'input_bias_weights':
+    # определим пустой список
+        input_bias_weight = []
+        input_bias_weight.clear()
+        # откроем файл и считаем его содержимое в список
+        with open('input_bias_weights.txt', 'r') as filehandle:  
+            for line in filehandle:
+                # удалим заключительный символ перехода строки
+                currentPlace = line[:-1]
+                # добавим элемент в конец списка
+                input_bias_weight.append(float(currentPlace))
+        return input_bias_weight
     #---------------------------------------------------------------------
     # Загрузка входных весов
     elif puty == 'input_weights':
@@ -91,6 +77,20 @@ def GetWeightFile (puty):
                 input_weights.append(float(currentPlace))
         input_weights = np.reshape(input_weights, (100, 100))
         return input_weights
+    #---------------------------------------------------------------------
+    # Загрузка весов смещения скрытого слоя
+    elif puty == 'leyar_bias_weights':
+    # определим пустой список
+        leyar_bias_weight = []
+        leyar_bias_weight.clear()
+        # откроем файл и считаем его содержимое в список
+        with open('leyar_bias_weights.txt', 'r') as filehandle:  
+            for line in filehandle:
+                # удалим заключительный символ перехода строки
+                currentPlace = line[:-1]
+                # добавим элемент в конец списка
+                leyar_bias_weight.append(float(currentPlace))
+        return leyar_bias_weight
     #---------------------------------------------------------------------
     # Загрузка весов скрытого слоя
     elif puty == 'leyar_weights':
@@ -135,9 +135,9 @@ class OurNeuralNetwork:
     def __init__(self):
         #self.weights = weights
         #self.bias = bias
-        self.h1 = Neuron(GetWeightFile('input_weights'), GetWeightFile('input_bias_weight'))
-        self.h2 = Neuron(GetWeightFile('leyar_weights'), GetWeightFile('leyar_bias_weight'))
-        self.o1 = Neuron(GetWeightFile('output_weights'), GetWeightFile('output_bias_weight'))
+        self.h1 = Neuron(GetWeightFile('input_weights'), GetWeightFile('input_bias_weights'))
+        self.h2 = Neuron(GetWeightFile('leyar_weights'), GetWeightFile('leyar_bias_weights'))
+        self.o1 = Neuron(GetWeightFile('output_weights'), GetWeightFile('output_bias_weights'))
     def feedforward(self, x):
         out_h1 = self.h1.feedforward(x, len(GetWeightFile('input_weights')))
         print(out_h1)
