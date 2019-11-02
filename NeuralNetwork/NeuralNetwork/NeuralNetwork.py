@@ -5,9 +5,9 @@ import numpy as np
 def CreatWeights(l):#h, w):
     mas = []
     for j in range(l):
-        mas.append(np.random.normal()) #Рандом Bias
+        #mas.append(np.random.normal()) #Рандом Bias
         #mas.append(float("{0:.1f}".format(random.uniform(-1.0, 1.0))))#[random.uniform(0.0, 2.0) for j in range(w)])
-        #mas.append([float("{0:.1f}".format(random.uniform(-2.0, 2.0))) for i in range(l)])#[random.uniform(0.0, 2.0) for j in range(w)])
+        mas.append(float("{0:.1f}".format(random.uniform(-1.0, 1.0))))# for i in range(l)])#[random.uniform(0.0, 2.0) for j in range(w)])
     #print(len(mas))
     #mas = np.array(mas)
     return mas
