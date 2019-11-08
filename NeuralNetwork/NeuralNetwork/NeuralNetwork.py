@@ -190,16 +190,16 @@ for i in range(len(pol)):
         max = pol[i]
         count = i
 print('otvet')
-if pol[count] >= 0: print('0 - ', pol[count])
-elif pol[count] >= 1: print('1 - ', pol[count])
-elif pol[count] >= 2: print('2 - ', pol[count])
-elif pol[count] >= 3: print('3 - ', pol[count])
-elif pol[count] >= 4: print('4 - ', pol[count])
-elif pol[count] >= 5: print('5 - ', pol[count])
-elif pol[count] >= 6: print('6 - ', pol[count])
-elif pol[count] >= 7: print('7 - ', pol[count])
-elif pol[count] >= 8: print('8 - ', pol[count])
-elif pol[count] >= 9: print('9 - ', pol[count])
+if count == 0: print('0 - ', pol[count])
+elif count == 1: print('1 - ', pol[count])
+elif count == 2: print('2 - ', pol[count])
+elif count == 3: print('3 - ', pol[count])
+elif count == 4: print('4 - ', pol[count])
+elif count == 5: print('5 - ', pol[count])
+elif count == 6: print('6 - ', pol[count])
+elif count == 7: print('7 - ', pol[count])
+elif count == 8: print('8 - ', pol[count])
+elif count == 9: print('9 - ', pol[count])
 
 #SetWeightFile(CreatWeights(h*w)) #Генерация и запись в файл случайных значений для весов
 #print(GetWeightFile('leyar_weights')) # Считывание с файла массива весов 
