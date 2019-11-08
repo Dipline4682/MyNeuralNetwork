@@ -1,3 +1,7 @@
+#https://python-scripts.com/intro-to-neural-networks
+#https://habr.com/ru/post/313216/
+#https://habr.com/ru/post/312450/
+
 import cv2
 import random
 import numpy as np
@@ -113,6 +117,7 @@ def GetWeightFile (puty):
 def sigmoid(x):
     return 1. / (1. + np.exp(-x))
 
+#код среднеквадратической ошибки (MSE)
 def mse_loss(y_true, y_pred):
     return ((y_true - y_pred) ** 2).mean()
 
@@ -143,12 +148,15 @@ class OurNeuralNetwork:
         self.o1 = Neuron(GetWeightFile('output_weights'), GetWeightFile('output_bias_weights'))
     def feedforward(self, x):
         out_h1 = self.h1.feedforward(x, len(GetWeightFile('input_weights')))
+        print('out_h1')
         print(out_h1)
         print()
         out_h2 = self.h2.feedforward(out_h1, len(GetWeightFile('leyar_weights')))
+        print('out_h2')
         print(out_h2)
         print()
         out_o1 = self.o1.feedforward(out_h2, len(GetWeightFile('output_weights')))
+        print('out_o1')
         return out_o1
 
 
@@ -173,7 +181,25 @@ print(pol)
 otv = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
 otv = np.array(otv)
 print()
-print(mse_loss(pol, otv))
+print('MSE')
+print(mse_loss(pol, otv)/1)
+max = 0
+count = 0
+for i in range(len(pol)):
+    if pol[i] > max:
+        max = pol[i]
+        count = i
+print('otvet')
+if pol[count] >= 0: print('0 - ', pol[count])
+elif pol[count] >= 1: print('1 - ', pol[count])
+elif pol[count] >= 2: print('2 - ', pol[count])
+elif pol[count] >= 3: print('3 - ', pol[count])
+elif pol[count] >= 4: print('4 - ', pol[count])
+elif pol[count] >= 5: print('5 - ', pol[count])
+elif pol[count] >= 6: print('6 - ', pol[count])
+elif pol[count] >= 7: print('7 - ', pol[count])
+elif pol[count] >= 8: print('8 - ', pol[count])
+elif pol[count] >= 9: print('9 - ', pol[count])
 
 #SetWeightFile(CreatWeights(h*w)) #Генерация и запись в файл случайных значений для весов
 #print(GetWeightFile('leyar_weights')) # Считывание с файла массива весов 
