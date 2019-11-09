@@ -160,7 +160,9 @@ class OurNeuralNetwork:
         return out_o1
 
 
-img = cv2.imread('2.png', 0)
+img = cv2.imread('3.png', 0)
+img = cv2.resize(img, (10, 10), interpolation = cv2.INTER_AREA)
+
 h, w = img.shape
 ret,img = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
 cv2.imshow('qwe', img)
@@ -183,7 +185,7 @@ otv = np.array(otv)
 print()
 print('MSE')
 print(mse_loss(pol, otv)/1)
-'''max = 0
+max = 0
 count = 0
 for i in range(len(pol)):
     if pol[i] > max:
@@ -199,7 +201,7 @@ elif count == 5: print('5 - ', pol[count])
 elif count == 6: print('6 - ', pol[count])
 elif count == 7: print('7 - ', pol[count])
 elif count == 8: print('8 - ', pol[count])
-elif count == 9: print('9 - ', pol[count])'''
+elif count == 9: print('9 - ', pol[count])
 
 #SetWeightFile(CreatWeights(h*w)) #Генерация и запись в файл случайных значений для весов
 #print(GetWeightFile('leyar_weights')) # Считывание с файла массива весов 
