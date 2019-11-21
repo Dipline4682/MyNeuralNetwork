@@ -121,6 +121,12 @@ def sigmoid(x):
 def mse_loss(y_true, y_pred):
     return ((y_true - y_pred) ** 2).mean()
 
+#Вычесление производной функции активации
+def Proizvodnaya(aktiv):
+    x = []
+    for i  in range(len(aktiv)):
+        x.append((1 - aktiv[i]) * aktiv[i])
+    return x
 class Neuron:
     def __init__(self, weights, bias):
         self.weights = weights
@@ -128,9 +134,7 @@ class Neuron:
     # input - изображение; l - размер матрицы весов для цикла 
     def feedforward(self, inputs, l):
         input_layer = []
-        input_layer.clear()
         weights = []
-        weights.clear()
         for i in range(l):
             weights.append(np.dot(self.weights[i], inputs))
         weights = np.array(weights)
@@ -147,39 +151,106 @@ class OurNeuralNetwork:
         self.h2 = Neuron(GetWeightFile('leyar_weights'), GetWeightFile('leyar_bias_weights'))
         self.o1 = Neuron(GetWeightFile('output_weights'), GetWeightFile('output_bias_weights'))
     def feedforward(self, x):
-        input = np.zeros((10,10), np.uint8)
-        layer = np.zeros((10,10), np.uint8)
-        output = np.zeros((10,10), np.uint8)
-
         out_h1 = self.h1.feedforward(x, len(GetWeightFile('input_weights')))
         print('out_h1')
         print(out_h1)
         print()
-        
-        input = out_h1.copy()
-        input = np.reshape(input, (10, 10))
-        cv2.imwrite('input.png', input)
 
         out_h2 = self.h2.feedforward(out_h1, len(GetWeightFile('leyar_weights')))
         print('out_h2')
         print(out_h2)
         print()
 
-        layer = out_h1
-        layer = np.reshape(layer, (10, 10))
-        cv2.imwrite('layer.png', layer)
-
-
         out_o1 = self.o1.feedforward(out_h2, len(GetWeightFile('output_weights')))
         print('out_o1')
 
-        output = out_h1
-        output = np.reshape(output, (10, 10))
-        cv2.imwrite('output.png', output)
-
         return out_o1
 
+    def train(self, data, ideal):
+        """
+        - data is a (n x 2) numpy array, n = # of samples in the dataset.
+        - all_y_trues is a numpy array with n elements.
+            Elements in all_y_trues correspond to those in data.
+        """
+        learn_rate = 0.1
+        epochs = 1000 # количество циклов во всём наборе данных
+ 
+        for epoch in range(epochs):
+            for x, y_true in zip(data, all_y_trues):
+                # --- Выполняем обратную связь (нам понадобятся эти значения в дальнейшем)
+                h1 = self.h1.feedforward(x, len(GetWeightFile('input_weights')))
+ 
+                h2 = self.h2.feedforward(out_h1, len(GetWeightFile('leyar_weights')))
+ 
+                o1 = self.o1.feedforward(out_h2, len(GetWeightFile('output_weights')))
+                y_pred = o1
 
+                #Производная от функции активации
+                P = Proizvodnaya(y_pred)
+                #Вычесляем среднеквадратичню ошибку идеал минус получившийся ответ
+                
+                '''MSE = []
+                #for i in range(len(pol)):
+                    MSE.append(mse_loss(ideal[i], y_pred[i])/1)
+                print('MSE = ', MSE)'''
+                
+                #Вычесляем дельта выход (разница между нужным и получившимся ответом 
+                #умноженная на производную от функции активации)
+                dO = []
+                for i in range(len(MSE)):
+                    dO.append(y_pred[i] * P[i])
+                #print(dO)
+
+                dH = []
+                P = Proizvodnaya(y_pred)
+ 
+                # --- Подсчет частных производных
+                # --- Наименование: d_L_d_w1 представляет "частично L / частично w1"
+                d_L_d_ypred = -2 * (y_true - y_pred)
+ 
+                # Нейрон o1
+                d_ypred_d_w5 = h1 * deriv_sigmoid(sum_o1)
+                d_ypred_d_w6 = h2 * deriv_sigmoid(sum_o1)
+                d_ypred_d_b3 = deriv_sigmoid(sum_o1)
+ 
+                d_ypred_d_h1 = self.w5 * deriv_sigmoid(sum_o1)
+                d_ypred_d_h2 = self.w6 * deriv_sigmoid(sum_o1)
+ 
+                # Нейрон h1
+                d_h1_d_w1 = x[0] * deriv_sigmoid(sum_h1)
+                d_h1_d_w2 = x[1] * deriv_sigmoid(sum_h1)
+                d_h1_d_b1 = deriv_sigmoid(sum_h1)
+ 
+                # Нейрон h2
+                d_h2_d_w3 = x[0] * deriv_sigmoid(sum_h2)
+                d_h2_d_w4 = x[1] * deriv_sigmoid(sum_h2)
+                d_h2_d_b2 = deriv_sigmoid(sum_h2)
+ 
+                # --- Обновляем вес и смещения
+                # Нейрон h1
+                self.w1 -= learn_rate * d_L_d_ypred * d_ypred_d_h1 * d_h1_d_w1
+                self.w2 -= learn_rate * d_L_d_ypred * d_ypred_d_h1 * d_h1_d_w2
+                self.b1 -= learn_rate * d_L_d_ypred * d_ypred_d_h1 * d_h1_d_b1
+ 
+                # Нейрон h2
+                self.w3 -= learn_rate * d_L_d_ypred * d_ypred_d_h2 * d_h2_d_w3
+                self.w4 -= learn_rate * d_L_d_ypred * d_ypred_d_h2 * d_h2_d_w4
+                self.b2 -= learn_rate * d_L_d_ypred * d_ypred_d_h2 * d_h2_d_b2
+ 
+                # Нейрон o1
+                self.w5 -= learn_rate * d_L_d_ypred * d_ypred_d_w5
+                self.w6 -= learn_rate * d_L_d_ypred * d_ypred_d_w6
+                self.b3 -= learn_rate * d_L_d_ypred * d_ypred_d_b3
+ 
+            # --- Подсчитываем общую потерю в конце каждой фазы
+            if epoch % 10 == 0:
+                y_preds = np.apply_along_axis(self.feedforward, 1, data)
+                loss = mse_loss(all_y_trues, y_preds)
+                print("Epoch %d loss: %.3f" % (epoch, loss))
+
+
+
+#Основное тело программы
 img = cv2.imread('2.png', 0)
 img = cv2.resize(img, (10, 10), interpolation = cv2.INTER_AREA)
 
@@ -206,7 +277,11 @@ pol = []
 pol = network.feedforward(img1d)
 print(pol)
 print()
-print('MSE = ', mse_loss(pol, otv)/1)
+
+#print(Proizvodnaya(pol))
+
+
+
 
 for i in range(len(pol)):
     if pol[i] > max:
@@ -215,34 +290,34 @@ for i in range(len(pol)):
 
 
 if count == 0: 
-    print('otvet 0; Veroyatnosty', pol[count])
+    print('otvet 0; Probability', pol[count])
     count = 0
 elif count == 1: 
-    print('otvet 1; Veroyatnosty', pol[count])
+    print('otvet 1; Probability', pol[count])
     count = 0
 elif count == 2: 
-    print('otvet 2; Veroyatnosty', pol[count])
+    print('otvet 2; Probability', pol[count])
     count = 0
 elif count == 3: 
-    print('otvet 3; Veroyatnosty', pol[count])
+    print('otvet 3; Probability', pol[count])
     count = 0
 elif count == 4: 
-    print('otvet 4; Veroyatnosty', pol[count])
+    print('otvet 4; Probability', pol[count])
     count = 0
 elif count == 5: 
-    print('otvet 5; Veroyatnosty', pol[count])
+    print('otvet 5; Probability', pol[count])
     count = 0
 elif count == 6: 
-    print('otvet 6; Veroyatnosty', pol[count])
+    print('otvet 6; Probability', pol[count])
     count = 0
 elif count == 7: 
-    print('otvet 7; Veroyatnosty', pol[count])
+    print('otvet 7; Probability', pol[count])
     count = 0
 elif count == 8: 
-    print('otvet 8; Veroyatnosty', pol[count])
+    print('otvet 8; Probability', pol[count])
     count = 0
 elif count == 9: 
-    print('otvet 9; Veroyatnosty', pol[count])
+    print('otvet 9; Probability', pol[count])
     count = 0
 
 #SetWeightFile(CreatWeights(h*w)) #Генерация и запись в файл случайных значений для весов
